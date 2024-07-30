@@ -14,10 +14,10 @@ namespace Todo.Domain.Entities.Context
 
         }
 
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            ApplyConfigurationsToModel(modelBuilder);
         }
         private void ApplyConfigurationsToModel(ModelBuilder modelBuilder)
         {
