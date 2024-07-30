@@ -14,5 +14,6 @@ namespace Todo.Domain.Entities.Identity
         public string ModificationUser { get; set; }
         public DateTime? ModificationDate { get; set; }
 
+        public ICollection<TodoEntity> TodoEntities { get; set; }
     }
 }

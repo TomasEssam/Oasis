@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Todo.Domain.Configurations;
 using Todo.Domain.Configurations.Identity;
 using Todo.Domain.Entities.Identity;
 
@@ -13,7 +14,7 @@ namespace Todo.Domain.Entities.Context
         {
 
         }
-
+        public DbSet<TodoEntity> TodoEntities { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -32,6 +33,8 @@ namespace Todo.Domain.Entities.Context
             modelBuilder.ApplyConfiguration(new ApplicationRoleClaimConfiguration());
 
             #endregion
+
+            modelBuilder.ApplyConfiguration(new TodoConfiguration());
         }
     }
 }
