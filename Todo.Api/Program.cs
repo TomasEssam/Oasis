@@ -13,6 +13,10 @@ using Todo.Domain.Entities;
 using Todo.Api.Services;
 using Todo.Domain.Seeds;
 using Todo.Api.IServices;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+
 namespace Todo.Api
 {
     public class Program
@@ -31,29 +35,49 @@ namespace Todo.Api
 
             builder.Services.AddDbContext<TodoContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-            
+
             // Add Identity services
             builder.Services.AddIdentity<ApplicationUser, ApplicationRole>()
                 .AddEntityFrameworkStores<TodoContext>()
                 .AddDefaultTokenProviders();
 
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = builder.Configuration["Token:Issuer"],
+                    ValidAudience = builder.Configuration["Token:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Token:Key"]))
+                };
+            });
+
             //Add DI 
             builder.Services.AddHttpClient();
             builder.Services.AddScoped<IUserService, UserService>();
-            builder.Services.AddScoped<IDbFactory,DbFactory>();
+            builder.Services.AddScoped<IDbFactory, DbFactory>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<IRepository<TodoEntity>, Repository<TodoEntity>>();
             builder.Services.AddScoped<ITodoService, TodoService>();
-
+            builder.Services.AddScoped<IRoleService, RoleService>();
 
             var app = builder.Build();
+
             // Run the database seeding
             using (var scope = app.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
                 try
                 {
-                    SeedApplication.Initialize(services);
+                    SeedApplication.Initialize(services).Wait();
                 }
                 catch (Exception ex)
                 {
@@ -61,6 +85,7 @@ namespace Todo.Api
                     logger.LogError(ex, "An error occurred while seeding the database.");
                 }
             }
+
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
@@ -69,12 +94,9 @@ namespace Todo.Api
             }
 
             app.UseHttpsRedirection();
-
+            app.UseAuthentication();
             app.UseAuthorization();
-
-
             app.MapControllers();
-
             app.Run();
         }
     }

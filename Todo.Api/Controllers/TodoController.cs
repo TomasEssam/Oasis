@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Todo.Api.DTOs;
 using Todo.Api.IServices;
 
@@ -6,6 +7,7 @@ namespace Todo.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class TodoController : ControllerBase
     {
         private readonly ITodoService _todoService;
@@ -15,7 +17,7 @@ namespace Todo.Api.Controllers
             _todoService = todoService;
         }
 
-        [HttpGet]
+        [HttpGet("GetAll")]
         public async Task<IActionResult> GetAll()
         {
             var todoEntities = await _todoService.GetAllAsync();
@@ -31,7 +33,7 @@ namespace Todo.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] TodoEntityDto todoEntityDto)
+        public async Task<IActionResult> Create(TodoEntityDto todoEntityDto)
         {
             var createdTodoEntity = await _todoService.CreateAsync(todoEntityDto);
             return Ok();

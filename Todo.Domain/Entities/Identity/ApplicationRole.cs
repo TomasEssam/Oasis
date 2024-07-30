@@ -6,9 +6,9 @@ namespace Todo.Domain.Entities.Identity
     {
         public bool IsDeleted { get; set; }
         public DateTime? DeletionDate { get; set; }
-        public string CreationUser { get; set; }
-        public DateTime CreationDate { get; set; }
-        public string ModificationUser { get; set; }
+        public string CreationUser { get; set; } = "Thomas";
+        public DateTime CreationDate { get; set; } = DateTime.Now;
+        public string? ModificationUser { get; set; }
         public DateTime? ModificationDate { get; set; }
     }
 }

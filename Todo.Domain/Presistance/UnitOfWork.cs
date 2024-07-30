@@ -23,9 +23,9 @@ namespace Todo.Domain.Presistance
             _dbcontext.SaveChanges();
         }
 
-        public Task SaveChangesAsync()
+        public async Task SaveChangesAsync()
         {
-            return _dbcontext.SaveChangesAsync();
+            await _dbcontext.SaveChangesAsync();
         }
     }
 }

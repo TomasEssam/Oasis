@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -18,17 +19,19 @@ namespace Todo.Api.Services.Identity
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IMapper _mapper;
 
         public UserService(IConfiguration configuration,
             SignInManager<ApplicationUser> signInManager,
             UserManager<ApplicationUser> userManager,
-            IHttpContextAccessor httpContextAccessor
-            )
+            IHttpContextAccessor httpContextAccessor,
+            IMapper mapper)
         {
             _configuration = configuration;
             _signInManager = signInManager;
             _userManager = userManager;
             _httpContextAccessor = httpContextAccessor;
+            _mapper = mapper;
         }
         public async Task<LoginResultDto> Authenticate(LoginDto dto)
         {
@@ -63,9 +66,34 @@ namespace Todo.Api.Services.Identity
             throw new Exception("Invalid User name or password");
         }
 
-        public Task CreateUserAsync(UserDto dto)
+        public async Task CreateUserAsync(UserDto dto)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var user = _mapper.Map<ApplicationUser>(dto);
+                user.IsActive = true;
+             
+                var result = await _userManager.CreateAsync(user, dto.Password);
+
+                if (!result.Succeeded)
+                {
+                    var errors = string.Join(",", result.Errors.Select(x => x.Description));
+                    throw new Exception(errors);
+                }
+
+                if (!string.IsNullOrEmpty(dto.RoleId))
+                {
+                    await _userManager.AddToRoleAsync(user, RolesNames.Admin);
+                }
+                else
+                {
+                    throw new Exception("You provided a Role name that doesn't exist");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         private async Task<IEnumerable<Claim>> GetUserClaims(ApplicationUser user)
