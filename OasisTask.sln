@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34622.214
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Todo.Api", "Todo.Api\Todo.Api.csproj", "{FE52C43A-23ED-42FF-AC9D-F27782E4D98D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Todo.Domain", "Todo.Domain\Todo.Domain.csproj", "{100FDDA0-A5AC-426C-9D61-23F872C87A2D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FE52C43A-23ED-42FF-AC9D-F27782E4D98D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE52C43A-23ED-42FF-AC9D-F27782E4D98D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE52C43A-23ED-42FF-AC9D-F27782E4D98D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE52C43A-23ED-42FF-AC9D-F27782E4D98D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{100FDDA0-A5AC-426C-9D61-23F872C87A2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{100FDDA0-A5AC-426C-9D61-23F872C87A2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{100FDDA0-A5AC-426C-9D61-23F872C87A2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{100FDDA0-A5AC-426C-9D61-23F872C87A2D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E09E8327-4E74-4E75-9334-8DDCBFB36B90}
+	EndGlobalSection
+EndGlobal
